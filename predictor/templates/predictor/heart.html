@@ -1,0 +1,22 @@
+<h2>Heart Disease Prediction</h2>
+<form method="POST" action="{% url 'predict_heart' %}">
+      {% csrf_token %}
+    Age: <input type="number" name="age" step="any" required><br>
+    Sex (0 or 1): <input type="number" name="sex" min="0" max="1" required><br>
+    Chest Pain Type (0-3): <input type="number" name="cp" min="0" max="3" required><br>
+    Resting BP: <input type="number" name="trestbps" required><br>
+    Cholesterol: <input type="number" name="chol" required><br>
+    Fasting Blood Sugar (0 or 1): <input type="number" name="fbs" min="0" max="1" required><br>
+    Rest ECG (0-2): <input type="number" name="restecg" min="0" max="2" required><br>
+    Max Heart Rate Achieved: <input type="number" name="thalach" required><br>
+    Exercise Induced Angina (0 or 1): <input type="number" name="exang" min="0" max="1" required><br>
+    Oldpeak: <input type="number" name="oldpeak" step="any" required><br>
+    Slope (0-2): <input type="number" name="slope" min="0" max="2" required><br>
+    CA (0-3): <input type="number" name="ca" min="0" max="3" required><br>
+    Thal (0-3): <input type="number" name="thal" min="0" max="3" required><br>
+    <button type="submit">Predict Heart Disease</button>
+</form>
+
+<div>
+  {{result}}
+</div>
