@@ -1,22 +1,39 @@
-import numpy as np
+import torch
 import pickle
 from django.shortcuts import render
+from predictor.models import CustomNeuralNetResNet
+import torch.nn.functional as F
+from torchvision import transforms
+from PIL import Image
 
-def heart_form(request):
-    return render(request, 'predictor/heart.html')
-from django.shortcuts import render
+xray_model = CustomNeuralNetResNet(outputs_number=3)
+state_dict = torch.load("saved_models/best_model.pth", map_location="cpu")
 
-# ... (your other imports and views)
+# Strip incompatible final layer
+del state_dict['net.fc.weight']
+del state_dict['net.fc.bias']
 
-def diabetes_form(request):
-    return render(request, 'predictor/diabetes.html')
+# Load remaining weights
+xray_model.load_state_dict(state_dict, strict=False)
+xray_model.eval()
+xray_classes = ['Normal', 'Pneumonia', 'Virus']
+image_transforms = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
 
-# Load the models once on server start
 heart_model = pickle.load(open('saved_models/heart_disease_model.pkl', 'rb'))
 diabetes_model = pickle.load(open('saved_models/diabetes_model.pkl', 'rb'))
 
 def home(request):
     return render(request, 'predictor/home.html')
+
+def heart_form(request):
+    return render(request, 'predictor/heart.html')
+
+def diabetes_form(request):
+    return render(request, 'predictor/diabetes.html')
 
 def predict_heart(request):
     result = None
@@ -66,3 +83,29 @@ def predict_diabetes(request):
         except Exception as e:
             result = f"Error during prediction: {e}"
     return render(request, 'predictor/diabetes.html', {'result': result})
+
+
+def predict_xray(request):
+    result = None
+    if request.method =='GET':
+        return render(request, 'predictor/pneumonia.html')
+    if request.method == 'POST' and request.FILES.get('xray_image'):
+        try:
+            image_file = request.FILES['xray_image']
+            image = Image.open(image_file).convert('RGB')
+            image = image_transforms(image).unsqueeze(0)
+
+            with torch.no_grad():
+                output = xray_model(image)
+                probs = F.softmax(output, dim=1)[0]
+                predicted_class = torch.argmax(probs).item()
+
+                result = {
+                    'prediction': xray_classes[predicted_class],
+                    'probabilities': list(zip(xray_classes, [round(p.item() * 100, 2) for p in probs]))
+                }
+
+        except Exception as e:
+            result = {'error': f"Error during prediction: {e}"}
+
+    return render(request, 'predictor/pneumonia.html', {'result': result})
