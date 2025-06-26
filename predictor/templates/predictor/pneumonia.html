@@ -98,7 +98,7 @@
         }
 
         .main-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 120px auto 0;
             background: var(--white);
             border-radius: 20px;
@@ -107,7 +107,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
@@ -141,12 +141,12 @@
 
         .header-icon {
             font-size: 3rem;
-            animation: breathe 3s infinite;
+            animation: pulse 2s infinite;
         }
 
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
 
         .header p {
@@ -190,91 +190,6 @@
             font-size: 0.9rem;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .file-upload-area {
-            position: relative;
-            border: 3px dashed #90caf9;
-            border-radius: var(--border-radius);
-            padding: 3rem 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-            cursor: pointer;
-        }
-
-        .file-upload-area:hover {
-            border-color: var(--primary-color);
-            background: linear-gradient(135deg, #bbdefb, #e1bee7);
-            transform: translateY(-2px);
-        }
-
-        .file-upload-area.dragover {
-            border-color: var(--accent-color);
-            background: linear-gradient(135deg, #c8e6c9, #dcedc8);
-        }
-
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .upload-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-subtext {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        #xray_image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-selected {
-            display: none;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
-            border: 2px solid #4CAF50;
-            border-radius: var(--border-radius);
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .selected-file-icon {
-            margin-right: 0.5rem;
-            color: var(--accent-color);
-        }
-
         .form-tips {
             background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             border: 2px solid #90caf9;
@@ -297,14 +212,141 @@
             font-size: 0.95rem;
         }
 
-        .tip-list {
-            margin-top: 1rem;
-            padding-left: 1rem;
+        .file-upload-container {
+            position: relative;
+            border: 3px dashed #d1ecf1;
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .tip-list li {
-            margin-bottom: 0.5rem;
+        .file-upload-container:hover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            transform: translateY(-2px);
+        }
+
+        .file-upload-container.drag-over {
+            border-color: var(--accent-color);
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+        }
+
+        .file-upload-container.has-file {
+            border-color: var(--accent-color);
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-info {
+            display: none;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-top: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-color), #45a049);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .file-meta {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .file-size {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .remove-file {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-file:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 1rem auto;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
         }
 
         .submit-container {
@@ -329,7 +371,6 @@
             gap: 0.5rem;
             min-width: 200px;
             justify-content: center;
-            font-family: inherit;
         }
 
         button:hover {
@@ -342,7 +383,7 @@
         }
 
         button:disabled {
-            opacity: 0.7;
+            background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
@@ -375,16 +416,22 @@
             display: none;
         }
 
-        .result.positive {
+        .result.pneumonia {
             background: linear-gradient(135deg, #ffebee, #ffcdd2);
             color: var(--danger-color);
             border: 2px solid #ffcdd2;
         }
 
-        .result.negative {
+        .result.normal {
             background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
             color: var(--accent-color);
             border: 2px solid #c8e6c9;
+        }
+
+        .result.error {
+            background: linear-gradient(135deg, #fff3e0, #ffcc02);
+            color: var(--warning-color);
+            border: 2px solid #ffcc02;
         }
 
         .result-icon {
@@ -392,36 +439,51 @@
             margin-bottom: 1rem;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #e9ecef;
-            border-radius: 2px;
-            margin: 2rem 0;
-            overflow: hidden;
-            display: none;
+        .probabilities {
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
         }
 
-        .progress-fill {
+        .prob-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .prob-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+        }
+
+        .prob-bar {
+            width: 60%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .prob-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
-            transition: width 0.3s ease;
-            width: 0%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
         }
 
-        .image-preview {
-            display: none;
-            margin-top: 1.5rem;
-            text-align: center;
+        .prob-fill.pneumonia {
+            background: linear-gradient(90deg, var(--danger-color), #d32f2f);
         }
 
-        .preview-image {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            border: 3px solid #e9ecef;
+        .prob-fill.normal {
+            background: linear-gradient(90deg, var(--accent-color), #45a049);
         }
 
         /* Responsive Design */
@@ -452,8 +514,12 @@
                 font-size: 0.9rem;
             }
 
-            .file-upload-area {
+            .file-upload-container {
                 padding: 2rem 1rem;
+            }
+
+            .upload-icon {
+                font-size: 3rem;
             }
         }
 
@@ -473,8 +539,10 @@
                 font-size: 1rem;
             }
 
-            .upload-icon {
-                font-size: 2.5rem;
+            .file-details {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -504,17 +572,12 @@
                     <i class="fas fa-lungs header-icon"></i>
                     Pneumonia Detection
                 </h1>
-                <p>Advanced AI-powered chest X-ray analysis using deep learning algorithms trained on comprehensive medical imaging datasets</p>
+                <p>Advanced AI-powered chest X-ray analysis using deep learning algorithms trained on thousands of medical images</p>
             </div>
         </div>
 
         <!-- Form Container -->
         <div class="form-container">
-            <!-- Progress Bar -->
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-
             <!-- Tips Section -->
             <div class="form-tips">
                 <div class="tip-title">
@@ -522,75 +585,95 @@
                     Important Guidelines
                 </div>
                 <div class="tip-content">
-                    For accurate pneumonia detection, please ensure your chest X-ray image meets these requirements:
-                    <ul class="tip-list">
-                        <li>Clear, high-resolution chest X-ray image</li>
-                        <li>Frontal view (PA or AP projection preferred)</li>
-                        <li>Proper contrast and brightness</li>
-                        <li>JPEG, PNG, or similar format</li>
-                        <li>File size under 10MB for optimal processing</li>
-                    </ul>
+                    Upload a clear chest X-ray image in JPEG, PNG, or DICOM format. The image should be front-facing (PA or AP view) for optimal accuracy. This tool is for screening purposes only and does not replace professional medical diagnosis.
                 </div>
             </div>
 
-            <form method="POST" action="{% url 'predict_pneumonia' %}" enctype="multipart/form-data" id="pneumoniaForm">
+            <form method="post" enctype="multipart/form-data" id="pneumoniaForm">
                 {% csrf_token %}
 
-                <!-- Image Upload Section -->
+                <!-- File Upload Section -->
                 <div class="form-section">
                     <div class="section-title">
                         <div class="section-icon">
                             <i class="fas fa-x-ray"></i>
                         </div>
-                        Chest X-ray Upload
+                        Chest X-Ray Upload
                     </div>
-
-                    <div class="form-group">
-                        <label for="xray_image">Upload Chest X-ray Image:</label>
-                        <div class="file-upload-area" id="uploadArea">
-                            <input type="file" name="xray_image" id="xray_image" accept="image/*" required>
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
+                    
+                    <div class="file-upload-container" id="uploadContainer">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">Upload Chest X-Ray Image</div>
+                        <div class="upload-subtext">Drag and drop your X-ray file here, or click to browse</div>
+                        <div class="upload-subtext">Supported formats: JPEG, PNG, DICOM • Max size: 10MB</div>
+                        <input type="file" name="xray_image" accept="image/*,.dcm" required class="file-input" id="fileInput">
+                        
+                        <div class="file-info" id="fileInfo">
+                            <div class="file-details">
+                                <div class="file-icon">
+                                    <i class="fas fa-file-image"></i>
+                                </div>
+                                <div class="file-meta">
+                                    <div class="file-name" id="fileName"></div>
+                                    <div class="file-size" id="fileSize"></div>
+                                </div>
+                                <button type="button" class="remove-file" id="removeFile">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
-                            <div class="upload-text">Click to upload or drag & drop</div>
-                            <div class="upload-subtext">Supported formats: JPEG, PNG, GIF (Max 10MB)</div>
                         </div>
                         
-                        <div class="file-selected" id="fileSelected">
-                            <i class="fas fa-check-circle selected-file-icon"></i>
-                            <span id="fileName">File selected successfully!</span>
-                        </div>
-
-                        <div class="image-preview" id="imagePreview">
-                            <img class="preview-image" id="previewImg" alt="X-ray preview">
-                        </div>
+                        <img class="image-preview" id="imagePreview" alt="X-ray preview">
                     </div>
                 </div>
 
                 <div class="submit-container">
                     <button type="submit" id="submitBtn" disabled>
                         <span class="submit-text">
-                            <i class="fas fa-search"></i>
-                            Analyze X-ray for Pneumonia
+                            <i class="fas fa-microscope"></i>
+                            Analyze X-Ray
                         </span>
                         <span class="loading">
                             <i class="fas fa-spinner"></i>
-                            Analyzing Image...
+                            Analyzing...
                         </span>
                     </button>
                 </div>
             </form>
 
             {% if result %}
-            <div class="result {% if 'pneumonia' in result|lower %}positive{% else %}negative{% endif %}" id="result">
+            <div class="result {% if result.error %}error{% elif 'pneumonia' in result.prediction|lower %}pneumonia{% else %}normal{% endif %}" id="result">
                 <div class="result-icon">
-                    {% if 'pneumonia' in result|lower %}
+                    {% if result.error %}
                         <i class="fas fa-exclamation-triangle"></i>
+                    {% elif 'pneumonia' in result.prediction|lower %}
+                        <i class="fas fa-lungs"></i>
                     {% else %}
                         <i class="fas fa-check-circle"></i>
                     {% endif %}
                 </div>
-                <div>{{ result }}</div>
+                {% if result.error %}
+                    <div><strong>Error:</strong> {{ result.error }}</div>
+                {% else %}
+                    <div><strong>Prediction:</strong> {{ result.prediction }}</div>
+                    {% if result.probabilities %}
+                    <div class="probabilities">
+                        <div class="prob-title">Confidence Levels</div>
+                        {% for label, prob in result.probabilities %}
+                        <div class="prob-item">
+                            <span>{{ label }}</span>
+                            <div class="prob-bar">
+                                <div class="prob-fill {% if 'pneumonia' in label|lower %}pneumonia{% else %}normal{% endif %}" 
+                                     style="width: {{ prob }}%"></div>
+                            </div>
+                            <span>{{ prob }}%</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endif %}
             </div>
             {% endif %}
         </div>
@@ -598,99 +681,98 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const fileInput = document.getElementById('xray_image');
-            const uploadArea = document.getElementById('uploadArea');
-            const fileSelected = document.getElementById('fileSelected');
+            const uploadContainer = document.getElementById('uploadContainer');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
             const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFile = document.getElementById('removeFile');
+            const imagePreview = document.getElementById('imagePreview');
             const submitBtn = document.getElementById('submitBtn');
             const form = document.getElementById('pneumoniaForm');
-            const imagePreview = document.getElementById('imagePreview');
-            const previewImg = document.getElementById('previewImg');
-            const progressBar = document.getElementById('progressBar');
-            const progressFill = document.getElementById('progressFill');
 
-            // File upload handling
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    handleFileSelect(file);
+            // File upload functionality
+            function handleFile(file) {
+                if (file && file.type.startsWith('image/')) {
+                    // Display file info
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    fileInfo.classList.add('show');
+                    uploadContainer.classList.add('has-file');
+                    submitBtn.disabled = false;
+
+                    // Show image preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.add('show');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please upload a valid image file (JPEG, PNG, DICOM)');
+                    resetFileUpload();
                 }
+            }
+
+            function resetFileUpload() {
+                fileInput.value = '';
+                fileInfo.classList.remove('show');
+                imagePreview.classList.remove('show');
+                uploadContainer.classList.remove('has-file');
+                submitBtn.disabled = true;
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // File input change handler
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+
+            // Remove file handler
+            removeFile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetFileUpload();
             });
 
             // Drag and drop functionality
-            uploadArea.addEventListener('dragover', function(e) {
+            uploadContainer.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                uploadArea.classList.add('dragover');
+                uploadContainer.classList.add('drag-over');
             });
 
-            uploadArea.addEventListener('dragleave', function(e) {
+            uploadContainer.addEventListener('dragleave', function(e) {
                 e.preventDefault();
-                uploadArea.classList.remove('dragover');
+                uploadContainer.classList.remove('drag-over');
             });
 
-            uploadArea.addEventListener('drop', function(e) {
+            uploadContainer.addEventListener('drop', function(e) {
                 e.preventDefault();
-                uploadArea.classList.remove('dragover');
+                uploadContainer.classList.remove('drag-over');
                 
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
-                    const file = files[0];
-                    if (file.type.startsWith('image/')) {
-                        fileInput.files = files;
-                        handleFileSelect(file);
-                    }
+                    // Update the file input
+                    const dt = new DataTransfer();
+                    dt.items.add(files[0]);
+                    fileInput.files = dt.files;
+                    
+                    handleFile(files[0]);
                 }
             });
 
-            function handleFileSelect(file) {
-                // Show file selected message
-                fileName.textContent = file.name;
-                fileSelected.style.display = 'block';
-                
-                // Enable submit button
-                submitBtn.disabled = false;
-                
-                // Show image preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-
-                // Update upload area appearance
-                uploadArea.style.borderColor = 'var(--accent-color)';
-                uploadArea.style.background = 'linear-gradient(135deg, #e8f5e8, #c8e6c9)';
-            }
-
-            // Form submission handling
+            // Form submission animation
             form.addEventListener('submit', function(e) {
-                if (!fileInput.files[0]) {
-                    e.preventDefault();
-                    alert('Please select an X-ray image to upload.');
-                    return;
-                }
-
-                // Show loading state
                 submitBtn.classList.add('loading');
                 submitBtn.disabled = true;
-                
-                // Show progress bar
-                progressBar.style.display = 'block';
-                
-                // Simulate progress (since we can't track actual upload progress easily)
-                let progress = 0;
-                const progressInterval = setInterval(function() {
-                    progress += Math.random() * 15;
-                    if (progress > 90) progress = 90;
-                    progressFill.style.width = progress + '%';
-                }, 200);
-
-                // Clear interval after form submission
-                setTimeout(() => {
-                    clearInterval(progressInterval);
-                    progressFill.style.width = '100%';
-                }, 3000);
             });
 
             // Show result if it exists
@@ -698,25 +780,24 @@
             if (result) {
                 result.style.display = 'block';
                 result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Animate probability bars
+                setTimeout(() => {
+                    const probFills = result.querySelectorAll('.prob-fill');
+                    probFills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 100);
+                    });
+                }, 500);
             }
 
-            // File validation
-            fileInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    // Check file size (10MB limit)
-                    if (file.size > 10 * 1024 * 1024) {
-                        alert('File size must be less than 10MB');
-                        this.value = '';
-                        return;
-                    }
-                    
-                    // Check file type
-                    if (!file.type.startsWith('image/')) {
-                        alert('Please select a valid image file');
-                        this.value = '';
-                        return;
-                    }
+            // Click to upload functionality
+            uploadContainer.addEventListener('click', function() {
+                if (!uploadContainer.classList.contains('has-file')) {
+                    fileInput.click();
                 }
             });
         });

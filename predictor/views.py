@@ -1,13 +1,43 @@
 from django.shortcuts import render
+import pandas as pd
 import joblib
 import os
-
+from PIL import Image
+import torch
+import torch.nn.functional as F
+from torchvision import transforms
+import torch
+import pickle
+from django.shortcuts import render
+from predictor.models import CustomNeuralNetResNet
+import torch.nn.functional as F
+from torchvision import transforms
+from PIL import Image
 # Base directory for model paths
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Load your models
 heart_model = joblib.load(os.path.join(base_dir, 'saved_models', 'heart_model.pkl'))
 diabetes_model = joblib.load(os.path.join(base_dir, 'saved_models', 'diabetes_model.pkl'))
+
+
+
+xray_model = CustomNeuralNetResNet(outputs_number=3)
+state_dict = torch.load("saved_models/best_model.pth", map_location="cpu")
+
+# Strip incompatible final layer
+del state_dict['net.fc.weight']
+del state_dict['net.fc.bias']
+
+# Load remaining weights
+xray_model.load_state_dict(state_dict, strict=False)
+xray_model.eval()
+xray_classes = ['Normal', 'Pneumonia', 'Virus']
+image_transforms = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
 
 # Home view
 def home(request):
@@ -105,25 +135,32 @@ def predict_diabetes(request):
             gender_val = gender_map.get(gender)
             smoking_val = smoking_map.get(smoking_history.lower(), 3)
 
-            features = [[
-                gender_val,
-                float(age),
-                int(hypertension),
-                int(heart_disease),
-                smoking_val,
-                float(bmi),
-                float(hba1c_level),
-                float(blood_glucose_level),
-                0,  # dummy value 1
-                0,  # dummy value 2
-                0,  # dummy value 3
-                0,  # dummy value 4
-                0   # dummy value 5
-            ]]
-            # TODO: Replace dummy values with actual form inputs if needed
+            with open('encoders.pkl', 'rb') as f:
+                encoders = pickle.load(f)
 
-            # Predict
-            prediction = diabetes_model.predict(features)
+            input_df = pd.DataFrame({
+                'gender': [gender_val],
+                'age': [float(age)],
+                'hypertension': [int(hypertension)],
+                'heart_disease': [int(heart_disease)],
+                'smoking_history': [smoking_val],
+                'bmi': [float(bmi)],
+                'HbA1c_level': [float(hba1c_level)],
+                'blood_glucose_level': [float(blood_glucose_level)]
+            })
+
+            # Apply saved encodings to categorical columns
+            for col in ['gender', 'smoking_history']:
+                if col in input_df.columns:
+                    try:
+                        input_df[col] = encoders[col].transform(input_df[col])
+                    except ValueError as e:
+                        print(f"Warning: Unknown category in {col}. Using default encoding.")
+                        # Handle unknown categories by assigning a default value or most frequent class
+                        input_df[col] = 0  # or use encoders[col].transform([most_frequent_class])[0]
+
+            print(input_df.head())
+            prediction = diabetes_model.predict(input_df.values)
             result = "Positive for Diabetes" if prediction[0] == 1 else "Negative for Diabetes"
 
         except Exception as e:
@@ -131,10 +168,29 @@ def predict_diabetes(request):
 
     return render(request, 'predictor/diabetes.html', {'result': result})
 
+
+
 def predict_pneumonia(request):
-    if request.method == 'POST':
-        # Placeholder for image processing
-        result = "Pneumonia prediction coming soon..."
-        return render(request, 'predictor/pneumonia.html', {'result': result})
-    
-    return render(request, 'predictor/pneumonia.html')
+    result = None
+    if request.method =='GET':
+        return render(request, 'predictor/pneumonia.html')
+    if request.method == 'POST' and request.FILES.get('xray_image'):
+        try:
+            image_file = request.FILES['xray_image']
+            image = Image.open(image_file).convert('RGB')
+            image = image_transforms(image).unsqueeze(0)
+
+            with torch.no_grad():
+                output = xray_model(image)
+                probs = F.softmax(output, dim=1)[0]
+                predicted_class = torch.argmax(probs).item()
+
+                result = {
+                    'prediction': xray_classes[predicted_class],
+                    'probabilities': list(zip(xray_classes, [round(p.item() * 100, 2) for p in probs]))
+                }
+
+        except Exception as e:
+            result = {'error': f"Error during prediction: {e}"}
+
+    return render(request, 'predictor/pneumonia.html', {'result': result})
