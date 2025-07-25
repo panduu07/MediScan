@@ -46,7 +46,7 @@ categorical_columns = [
     'sex', 'age_category', 'race', 'diabetic', 'physical_activity',
     'gen_health', 'asthma', 'kidney_disease', 'skin_cancer'
 ]
-
+encoders ={}
 # Apply label encoding to categorical columns
 for col in categorical_columns:
     if col in heart_df_encoded.columns:
