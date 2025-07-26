@@ -13,6 +13,7 @@ from predictor.models import CustomNeuralNetResNet
 import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
+from django.views.decorators.csrf import csrf_exempt
 # Base directory for model paths
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -51,29 +52,30 @@ def home(request):
     return render(request, 'predictor/home.html')
 
 # Heart disease prediction view
+@csrf_exempt
 def predict_heart(request):
     result = None
     if request.method == 'POST':
         try:
             # Collect raw input values as a dict
             raw_data = {
-                'bmi': float(request.POST.get('bmi')),
-                'smoking': request.POST.get('smoking'),
-                'alcohol_drinking': request.POST.get('alcohol_drinking'),
-                'stroke': request.POST.get('stroke'),
-                'physical_health': float(request.POST.get('physical_health')),
-                'mental_health': float(request.POST.get('mental_health')),
-                'diff_walking': request.POST.get('diff_walking'),
-                'sex': request.POST.get('sex'),
-                'age_category': request.POST.get('age_category'),
-                'race': request.POST.get('race'),
-                'diabetic': request.POST.get('diabetic'),
-                'physical_activity': request.POST.get('physical_activity'),
-                'gen_health': request.POST.get('gen_health'),
-                'sleep_time': float(request.POST.get('sleep_time')),
-                'asthma': request.POST.get('asthma'),
-                'kidney_disease': request.POST.get('kidney_disease'),
-                'skin_cancer': request.POST.get('skin_cancer')
+                'Bmi': float(request.POST.get('bmi')),
+                'Smoking': request.POST.get('smoking'),
+                'AlcoholDrinking': request.POST.get('alcohol_drinking'),
+                'Stroke': request.POST.get('stroke'),
+                'PhysicalHealth': float(request.POST.get('physical_health')),
+                'MentalHealth': float(request.POST.get('mental_health')),
+                'DiffWalking': request.POST.get('diff_walking'),
+                'Sex': request.POST.get('sex'),
+                'AgeCategory': request.POST.get('age_category'),
+                'Race': request.POST.get('race'),
+                'Diabetic': request.POST.get('diabetic'),
+                'PhysicalActivity': request.POST.get('physical_activity'),
+                'GenHealth': request.POST.get('gen_health'),
+                'SleepTime': float(request.POST.get('sleep_time')),
+                'Asthma': request.POST.get('asthma'),
+                'KidneyDisease': request.POST.get('kidney_disease'),
+                'SkinCancer': request.POST.get('skin_cancer')
             }
 
             # Create single-row DataFrame

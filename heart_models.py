@@ -42,9 +42,9 @@ heart_df_encoded = heart_df.copy()
 
 # List of categorical columns that need encoding
 categorical_columns = [
-    'smoking', 'alcohol_drinking', 'stroke', 'diff_walking', 
-    'sex', 'age_category', 'race', 'diabetic', 'physical_activity',
-    'gen_health', 'asthma', 'kidney_disease', 'skin_cancer'
+    'Smoking', 'AlcoholDrinking', 'Stroke', 'DiffWalking', 
+    'Sex', 'AgeCategory', 'Race', 'Diabetic', 'PhysicalActivity',
+    'GenHealth', 'Asthma', 'KidneyDisease', 'SkinCancer'
 ]
 encoders ={}
 # Apply label encoding to categorical columns
