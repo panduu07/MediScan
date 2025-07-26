@@ -18,6 +18,13 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Load your models
 heart_model = joblib.load(os.path.join(base_dir, 'saved_models', 'heart_model.pkl'))
+
+with open('saved_models/heart_model_columns.pkl', 'rb') as f:
+    model_columns = pickle.load(f)
+
+with open('saved_models/encoders_heart.pkl', 'rb') as f:
+    encoders = pickle.load(f)
+    
 diabetes_model = joblib.load(os.path.join(base_dir, 'saved_models', 'diabetes_model.pkl'))
 
 
@@ -48,60 +55,38 @@ def predict_heart(request):
     result = None
     if request.method == 'POST':
         try:
-            # Extract and convert inputs
-            bmi = float(request.POST.get('bmi'))
-            yes_no_map = {'Yes': 1, 'No': 0}
-            smoking = yes_no_map.get(request.POST.get('smoking'))
-            alcohol_drinking = yes_no_map.get(request.POST.get('alcohol_drinking'))
-            stroke = yes_no_map.get(request.POST.get('stroke'))
-            diff_walking = yes_no_map.get(request.POST.get('diff_walking'))
-            physical_activity = yes_no_map.get(request.POST.get('physical_activity'))
-            asthma = yes_no_map.get(request.POST.get('asthma'))
-            kidney_disease = yes_no_map.get(request.POST.get('kidney_disease'))
-            skin_cancer = yes_no_map.get(request.POST.get('skin_cancer'))
-            physical_health = float(request.POST.get('physical_health'))
-            mental_health = float(request.POST.get('mental_health'))
-
-            sex_map = {'Female': 0, 'Male': 1}
-            sex = sex_map.get(request.POST.get('sex'))
-
-            age_map = {
-                '18-24': 0, '25-29': 1, '30-34': 2, '35-39': 3,
-                '40-44': 4, '45-49': 5, '50-54': 6, '55-59': 7,
-                '60-64': 8, '65-69': 9, '70-74': 10, '75-79': 11,
-                '80 or older': 12
+            # Collect raw input values as a dict
+            raw_data = {
+                'bmi': float(request.POST.get('bmi')),
+                'smoking': request.POST.get('smoking'),
+                'alcohol_drinking': request.POST.get('alcohol_drinking'),
+                'stroke': request.POST.get('stroke'),
+                'physical_health': float(request.POST.get('physical_health')),
+                'mental_health': float(request.POST.get('mental_health')),
+                'diff_walking': request.POST.get('diff_walking'),
+                'sex': request.POST.get('sex'),
+                'age_category': request.POST.get('age_category'),
+                'race': request.POST.get('race'),
+                'diabetic': request.POST.get('diabetic'),
+                'physical_activity': request.POST.get('physical_activity'),
+                'gen_health': request.POST.get('gen_health'),
+                'sleep_time': float(request.POST.get('sleep_time')),
+                'asthma': request.POST.get('asthma'),
+                'kidney_disease': request.POST.get('kidney_disease'),
+                'skin_cancer': request.POST.get('skin_cancer')
             }
-            age_category = age_map.get(request.POST.get('age_category'))
 
-            race_map = {'White': 0, 'Black': 1, 'Asian': 2, 'Other': 3, 'Hispanic': 4}
-            race = race_map.get(request.POST.get('race'))
+            # Create single-row DataFrame
+            df_input = pd.DataFrame([raw_data])
 
-            diabetic_map = {
-                'Yes': 0,
-                'No': 1,
-                'No, borderline diabetes': 2,
-                'Yes (during pregnancy)': 3
-            }
-            diabetic = diabetic_map.get(request.POST.get('diabetic'))
+            # Label encode using stored encoders
+            for col, le in encoders.items():
+                df_input[col] = le.transform(df_input[col].astype(str))
 
-            gen_health_map = {
-                'Excellent': 0,
-                'Very good': 1,
-                'Good': 2,
-                'Fair': 3,
-                'Poor': 4
-            }
-            gen_health = gen_health_map.get(request.POST.get('gen_health'))
+            # Reindex to match training features
+            df_input = df_input.reindex(columns=model_columns, fill_value=0)
 
-            sleep_time = float(request.POST.get('sleep_time'))
-
-            features = [[
-                bmi, smoking, alcohol_drinking, stroke, physical_health, mental_health,
-                diff_walking, sex, age_category, race, diabetic, physical_activity,
-                gen_health, sleep_time, asthma, kidney_disease, skin_cancer
-            ]]
-
-            prediction = heart_model.predict(features)
+            prediction = heart_model.predict(df_input)
             result = "Positive for Heart Disease" if prediction[0] == 1 else "Negative for Heart Disease"
 
         except Exception as e:
