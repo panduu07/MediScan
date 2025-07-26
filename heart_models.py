@@ -57,11 +57,15 @@ for col in categorical_columns:
         encoders[col] = le
 
 # Save encoders for later use in prediction
-with open('encoders_heart.pkl', 'wb') as f:
+with open('saved_models/encoders_heart.pkl', 'wb') as f:
     pickle.dump(encoders, f)
+
 # Prepare features and target
 X_h = heart_df_encoded.drop(columns=['HeartDisease'])
 y_h = heart_df_encoded['HeartDisease']
+
+with open('saved_models/heart_model_columns.pkl', 'wb') as f:
+    pickle.dump(X_h.columns.tolist(), f)
 
 # If target is also categorical, encode it
 if y_h.dtype == 'object':
