@@ -26,6 +26,42 @@
       --shadow: 0 10px 30px rgba(0,0,0,0.1);
       --shadow-hover: 0 20px 40px rgba(0,0,0,0.15);
     }
+  .btn-danger {
+    background-color: #dc3545;  /* Bootstrap-like red */
+    color: #fff;                /* White text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;  /* Darker red on hover */
+}
+
+.btn-logout {
+    background-color: #6c757d;  /* Gray color for logout */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btn-logout:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
 
     body {
       font-family: 'Inter', sans-serif;
@@ -85,6 +121,7 @@
       display: flex;
       list-style: none;
       gap: 2rem;
+      align-items: center;
     }
 
     .nav-links a {
@@ -95,7 +132,7 @@
       position: relative;
     }
 
-    .nav-links a::after {
+    .nav-links a:not(.btn):not(.btn-logout)::after {
       content: '';
       position: absolute;
       bottom: -5px;
@@ -106,7 +143,7 @@
       transition: width 0.3s ease;
     }
 
-    .nav-links a:hover::after {
+    .nav-links a:not(.btn):not(.btn-logout):hover::after {
       width: 100%;
     }
 
@@ -512,7 +549,11 @@
         <li><a href="#services">Services</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="#emergency" class="btn btn-primary">Emergency</a></li>
+        <li><a href="#emergency" class="btn btn-danger">Emergency</a></li>
+        <li><a href="#" class="btn-logout" onclick="handleLogout(); return false;">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </a></li>
       </ul>
       <div class="mobile-menu">
         <div class="hamburger"></div>
@@ -580,7 +621,6 @@
           <ul class="service-features">
             <li>Risk factor analysis</li>
             <li>Lifestyle recommendations</li>
-            <li>Real-time monitoring</li>
             <li>Preventive care guidance</li>
           </ul>
           <a href="/heart/" class="btn btn-primary">
@@ -599,7 +639,6 @@
             <li>Blood glucose prediction</li>
             <li>Lifestyle impact analysis</li>
             <li>Dietary recommendations</li>
-            <li>Long-term monitoring</li>
           </ul>
           <a href="/diabetes/" class="btn btn-primary">
             <i class="fas fa-chart-line"></i>
@@ -617,7 +656,6 @@
             <li>X-ray image analysis</li>
             <li>Pattern recognition</li>
             <li>Severity assessment</li>
-            <li>Treatment suggestions</li>
           </ul>
           <a href="/pneumonia/" class="btn btn-primary">
             <i class="fas fa-x-ray"></i>
@@ -658,19 +696,10 @@
           <li><a href="/heart/">Heart Disease Detection</a></li>
           <li><a href="/diabetes/">Diabetes Screening</a></li>
           <li><a href="/pneumonia/">Pneumonia Analysis</a></li>
-          <li><a href="#telemedicine">Telemedicine</a></li>
+  
         </ul>
       </div>
       
-      <div class="footer-section">
-        <h3>Company</h3>
-        <ul>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#careers">Careers</a></li>
-          <li><a href="#research">Research</a></li>
-          <li><a href="#partners">Partners</a></li>
-        </ul>
-      </div>
       
       <div class="footer-section">
         <h3>Support</h3>
@@ -689,6 +718,21 @@
   </footer>
 
   <script>
+    // Logout function
+    function handleLogout() {
+      // You can add any cleanup logic here (clear session data, etc.)
+      
+      // Optional: Show a confirmation dialog
+      if (confirm('Are you sure you want to logout?')) {
+        // Clear any stored user data (if you're using localStorage/sessionStorage in your actual app)
+        // localStorage.clear();
+        // sessionStorage.clear();
+        
+        // Redirect to the root URL (login page)
+        window.location.href = 'http://127.0.0.1:8000/';
+      }
+    }
+
     // Navbar scroll effect
     window.addEventListener('scroll', function() {
       const navbar = document.getElementById('navbar');

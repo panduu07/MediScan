@@ -48,6 +48,8 @@ image_transforms = transforms.Compose([
 ])
 
 # Home view
+def login(request):
+    return render(request, 'predictor/login.html')
 def home(request):
     return render(request, 'predictor/home.html')
 

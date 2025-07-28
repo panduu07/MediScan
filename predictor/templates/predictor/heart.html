@@ -213,6 +213,44 @@
             font-size: 0.95rem;
         }
 
+                    .health-tips-card {
+            background: linear-gradient(135deg, #f0f9ff, #ffffff);
+            border: 1px solid #b3e5fc;
+            border-left: 6px solid #29b6f6; /* accent bar */
+            border-radius: 16px;
+            padding: 24px 28px;
+            max-width: 650px;
+            margin: 30px auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-shadow: 0 8px 24px rgba(41, 182, 246, 0.15);
+            }
+
+            .health-tips-card h3 {
+            margin-top: 18px;
+            color: #0277bd;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #b3e5fc;
+            padding-bottom: 6px;
+            font-weight: 600;
+            }
+
+            .health-tips-card p {
+            margin: 10px 0;
+            color: #37474f;
+            font-size: 1rem;
+            line-height: 1.6;
+            }
+
+            .health-tips-card .warning {
+            color: #d32f2f;
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 10px 12px;
+            margin-top: 24px;
+            font-weight: 600;
+            border-radius: 6px;
+            }
+
         input, select {
             width: 100%;
             padding: 0.875rem;
@@ -426,10 +464,10 @@
                 </div>
                 MEDISCAN
             </a>
-            <a href="/" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Home
-            </a>
+                <a href="{% url 'home' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
         </div>
     </nav>
 
@@ -702,6 +740,29 @@
                     {% endif %}
                 </div>
                 <div>{{ result }}</div>
+                <div class="health-tips-card">
+                    {% if 'positive' in result|lower or 'risk' in result|lower %}
+                    <br><br>
+                    <span>❤️ Heart-Healthy Tips</span>
+                    <p>• Eat a heart-healthy diet (fruits, vegetables, whole grains)</p>
+                    <p>• Reduce salt, sugar, and saturated fat intake</p>
+                    <p>• Choose lean proteins like fish, nuts, and legumes</p>
+                    <p>• Avoid red meat and processed foods</p>
+                    <p>• Drink enough water and avoid excessive alcohol</p>
+                    <br>
+
+                    <span>✅ Preventive Care</span>
+                    <p>• Engage in daily physical activity (at least 30 minutes)</p>
+                    <p>• Monitor blood pressure and cholesterol regularly</p>
+                    <p>• Maintain a healthy weight and waistline</p>
+                    <p>• Avoid smoking and manage stress</p>
+                    <p>• Follow up with your doctor as advised</p>
+
+                    <p class="warning">⚠️ This is not a final diagnosis. Please consult a cardiologist for proper evaluation.</p>
+                    {% else %}
+                    <span>🫀 You appear to be at low risk. Keep taking care of your heart with a healthy lifestyle!</span>
+                    {% endif %}
+                </div>
             </div>
             {% endif %}
         </div>
